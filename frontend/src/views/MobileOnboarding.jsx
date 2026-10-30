@@ -146,7 +146,7 @@ export default function MobileOnboarding() {
   </>
   const wrap = { display: 'flex', flexDirection: 'column', justifyContent: 'center', minHeight: '78vh', textAlign: 'center' }
   return (
-    <div className="narrow" style={wrap}>
+    <div className="narrow brand-entry" style={wrap}>
       {head}
       <div className="muted" style={{ marginBottom: 34 }}>{t('Plan your training, record every session, and watch your progress build.')}</div>
       <Button variant="primary" icon="lock" onClick={() => chooseLocalMode()}>{t('Use on this device')}</Button>

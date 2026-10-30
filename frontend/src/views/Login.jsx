@@ -78,14 +78,14 @@ export default function Login() {
     catch (e) { if (e.name !== 'NotAllowedError' && e.name !== 'AbortError') useUI.getState().toast(passkeyError(e, t('Sign-in failed'))) }
   }
   const head = <>
-    <img src={brandSymbol} alt={BRAND.name} width="64" height="64" style={{ margin: '0 auto 12px' }} />
+    <img src={brandSymbol} alt={BRAND.name} width="64" height="64" className="brand-symbol" />
     <h1 style={{ fontSize: 34, fontWeight: 700, letterSpacing: '-.028em', margin: '10px 0 4px' }}>{BRAND.name}!</h1>
   </>
   const wrap = { display: 'flex', flexDirection: 'column', justifyContent: 'center', minHeight: '78vh', textAlign: 'center' }
 
   // Demo build: no backend to sign in against — the only way in is the local guest profile.
   if (DEMO) return (
-    <div className="narrow" style={wrap}>
+    <div className="narrow brand-entry" style={wrap}>
       {head}
       <div className="muted" style={{ marginBottom: 30 }}>{t('Live demo. Everything stays in this browser.')}</div>
       <Button variant="primary" icon="play" onClick={() => setGuest(true)}>{t('Start the demo')}</Button>
@@ -99,7 +99,7 @@ export default function Login() {
   )
 
   return (
-    <div className="narrow" style={wrap}>
+    <div className="narrow brand-entry" style={wrap}>
       {head}
       <div className="muted" style={{ marginBottom: 34 }}>{t(BRAND.motivation)}</div>
       {webauthnOK() ? <>

@@ -2343,8 +2343,22 @@ button.wl-summary{width:100%;padding:0 0 10px;text-align:start;border-radius:var
 .gym-actions{display:flex;flex-direction:column;gap:10px;margin:4px 0 30px}
 
 /* The brand artwork is independent of the user's selected accent. */
-.brand-wordmark{width:260px;max-width:80%;margin:0 auto 12px}
+.brand-wordmark{width:160px;max-width:80%;margin:0 auto 12px}
 .brand-wordmark img{display:block;width:100%;height:auto}
 .brand-wordmark .brand-on-dark{display:none}
 :root[data-theme="dark"] .brand-wordmark .brand-on-light{display:none}
 :root[data-theme="dark"] .brand-wordmark .brand-on-dark{display:block}
+
+/* Phase 2: only branded entry points and existing Home/Progress presentation. */
+.brand-symbol{display:block;width:64px;height:auto;margin:0 auto 12px}
+.home-page .card,.progress-page .card{padding:16px;margin-bottom:16px}
+.home-page .card h2,.progress-page .card h2{font-size:1.125rem;font-weight:600;line-height:1.3;color:var(--label)}
+.progress-page .sec{font-size:1.125rem;font-weight:600;line-height:1.3;color:var(--label);margin-top:24px}
+.progress-page .tiles{gap:12px;grid-template-columns:repeat(2,minmax(0,1fr));margin-bottom:16px}
+.progress-page .tile{min-width:0;padding:16px}
+.progress-page .tile .l{font-size:.8125rem;font-weight:500;line-height:1.35}
+.progress-page .tile .v{font-size:1.75rem;font-weight:600;line-height:1.2;overflow-wrap:anywhere}
+.progress-page .tile .v-unit{font-size:1.5rem}
+.home-activity-value{flex-wrap:wrap;line-height:1.25}
+.home-activity-label{font-size:.875rem;line-height:1.4}
+@media (min-width:1000px){.progress-page .tiles{grid-template-columns:repeat(4,minmax(0,1fr))}}
