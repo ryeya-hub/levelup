@@ -2341,3 +2341,10 @@ button.wl-summary{width:100%;padding:0 0 10px;text-align:start;border-radius:var
 .gym-radius-row>:first-child{flex:1}
 .gym-radius-val{min-width:64px;text-align:end;font-variant-numeric:tabular-nums;color:var(--label-2)}
 .gym-actions{display:flex;flex-direction:column;gap:10px;margin:4px 0 30px}
+
+/* The brand artwork is independent of the user's selected accent. */
+.brand-wordmark{width:260px;max-width:80%;margin:0 auto 12px}
+.brand-wordmark img{display:block;width:100%;height:auto}
+.brand-wordmark .brand-on-dark{display:none}
+:root[data-theme="dark"] .brand-wordmark .brand-on-light{display:none}
+:root[data-theme="dark"] .brand-wordmark .brand-on-dark{display:block}
