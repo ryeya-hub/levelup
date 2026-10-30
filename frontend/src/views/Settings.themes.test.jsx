@@ -81,6 +81,31 @@ const footer = () => host.querySelector('.sect-f')?.textContent
 const at = (y, m, d) => { vi.useFakeTimers({ toFake: ['Date'] }); vi.setSystemTime(new Date(y, m - 1, d, 12)) }
 afterEach(() => vi.useRealTimers())
 
+describe('Theme selector in Look & Home', () => {
+  const selected = () => [...rowOf('Theme').querySelectorAll('.seg button')].find(b => b.getAttribute('aria-pressed') === 'true')?.textContent
+  it.each([undefined, null, '', 'invalid'])('displays missing or invalid %s as Light without writing', theme => {
+    mocks.S.theme = theme
+    const before = structuredClone(mocks.S)
+    mount('look')
+    expect(selected()).toBe('Light')
+    expect(mocks.S).toEqual(before)
+    mount(null)
+    expect(rowOf('Look & Home').textContent).toContain('Light')
+  })
+  it('keeps all three choices in the same control and changes only the theme', () => {
+    mocks.S.accent = 'violet'
+    const before = structuredClone(mocks.S)
+    mount('look')
+    expect([...rowOf('Theme').querySelectorAll('.seg button')].map(b => b.textContent)).toEqual(['Dark', 'Light', 'System'])
+    for (const [theme, label] of [['dark', 'Dark'], ['light', 'Light'], ['system', 'System']]) {
+      act(() => [...rowOf('Theme').querySelectorAll('.seg button')].find(b => b.textContent === label).click())
+      expect(mocks.S).toEqual({ ...before, theme })
+      mount('look')
+      expect(selected()).toBe(label)
+    }
+  })
+})
+
 describe('Seasonal themes', () => {
   it('Look & Home opens the page, and names the theme that shows right now', () => {
     at(2026, 10, 25)
