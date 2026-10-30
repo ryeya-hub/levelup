@@ -4,9 +4,24 @@ vi.mock('../lib/api.js', () => ({ api: vi.fn() }))
 vi.mock('./useUI.js', () => ({ useUI: { getState: () => ({ toast: vi.fn() }) } }))
 import { freshState, DEF, restoredStateFor, useStore } from './useStore.js'
 import { resolveTheme } from '../lib/theme.js'
+import { BRAND } from '../brand.js'
+import { accentValue, customAccentVars } from '../lib/accent.js'
 
 afterEach(() => { localStorage.clear(); vi.unstubAllGlobals() })
 describe('theme preference compatibility', () => {
+  it('uses brand indigo for new profiles through the existing custom-accent setting', () => {
+    const state = freshState()
+    expect(accentValue(state)).toBe(BRAND.primary.toLowerCase())
+    for (const theme of ['light', 'dark']) {
+      expect(customAccentVars(accentValue(state), theme)['--acc']).toBe(BRAND.primary.toLowerCase())
+    }
+  })
+  it('retains saved Green and custom accent preferences', () => {
+    for (const preference of [{ accent: 'lime' }, { accent: 'custom', accentCustom: '#123abc' }]) {
+      const saved = { ...freshState(), ...preference }
+      expect(restoredStateFor(freshState(), saved)).toEqual(saved)
+    }
+  })
   it('fresh profiles and missing remote preferences default to Light', () => {
     expect(DEF.theme).toBe('light')
     expect(freshState().theme).toBe('light')

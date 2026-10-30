@@ -35,6 +35,13 @@ const syntaxError = () => new ErrorEvent('error', {
 })
 
 describe('boot watchdog', () => {
+  it('builds the ascending icon from left to middle to right', () => {
+    const steps = [...boot().querySelectorAll('rect')]
+    expect(steps.map(step => step.getAttribute('class'))).toEqual(['pl', 'bar in', 'pr outer'])
+    expect(steps.map(step => Number(step.getAttribute('x')))).toEqual([100, 214, 328])
+    expect(html).toContain('#boot .in{animation-delay:.22s}')
+    expect(html).toContain('#boot .outer{animation-delay:.36s}')
+  })
   it('replaces the logo with the reason and a Reload button when a chunk does not parse', () => {
     window.dispatchEvent(syntaxError())
     const b = boot()

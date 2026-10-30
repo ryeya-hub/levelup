@@ -17,6 +17,11 @@ compact symbol and monochrome (`currentColor`, suitable for inline SVG use). The
 no added font or package dependencies. These small assets are inlined by the existing
 Vite build. The logo's indigo is independent of the user's accent setting.
 
+Following the Phase 1 review, new profiles use `#6857F2` for accent text and buttons
+through the existing custom-accent setting. Saved presets and custom colours remain
+unchanged. Login uses the compact symbol with the heading **LevelUp!**. The loading
+icon builds from left to middle to right, retaining the existing animation timing.
+
 Keep HTML and manifest metadata in sync with `brand.js`; `frontend/src/brand.test.js`
 checks their static copies. Translate interface copy with the existing `t()` mechanism
 and locale packs; keep LevelUp's spelling. The tagline is identity/documentation copy,

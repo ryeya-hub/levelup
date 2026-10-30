@@ -52,6 +52,14 @@ beforeEach(() => { mocks.webauthn = true; mocks.config = null; mocks.sheets.leng
 afterEach(() => { act(() => { mounted.splice(0).forEach(({ root, host }) => { root.unmount(); host.remove() }) }) })
 
 describe('Login with password sign-in', () => {
+  it('shows the compact brand icon and LevelUp! heading', () => {
+    const page = mount(<Login />)
+    expect(page.querySelector('h1').textContent).toBe('LevelUp!')
+    const logo = page.querySelector('img[alt="LevelUp"]')
+    expect(logo).toBeTruthy()
+    expect(logo.getAttribute('width')).toBe('64')
+    expect(logo.getAttribute('height')).toBe('64')
+  })
   it('an instance without it looks exactly as before', () => {
     const page = mount(<Login />)
     expect(buttons(page)).not.toContain('Sign in with password')

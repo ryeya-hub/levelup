@@ -1,5 +1,5 @@
 import { BRAND } from '../brand.js'
-import BrandLogo from '../components/BrandLogo.jsx'
+import brandSymbol from '../assets/brand/levelup-symbol.svg'
 import { useStore } from '../store/useStore.js'
 import { useUI } from '../store/useUI.js'
 import { webauthnOK, passkeyLogin, passkeyRegister, passkeyError, bio } from '../lib/api.js'
@@ -78,8 +78,8 @@ export default function Login() {
     catch (e) { if (e.name !== 'NotAllowedError' && e.name !== 'AbortError') useUI.getState().toast(passkeyError(e, t('Sign-in failed'))) }
   }
   const head = <>
-    <BrandLogo />
-    <h1 style={{ fontSize: 34, fontWeight: 700, letterSpacing: '-.028em', margin: '10px 0 4px' }}>{t('Welcome to LevelUp')}</h1>
+    <img src={brandSymbol} alt={BRAND.name} width="64" height="64" style={{ margin: '0 auto 12px' }} />
+    <h1 style={{ fontSize: 34, fontWeight: 700, letterSpacing: '-.028em', margin: '10px 0 4px' }}>{BRAND.name}!</h1>
   </>
   const wrap = { display: 'flex', flexDirection: 'column', justifyContent: 'center', minHeight: '78vh', textAlign: 'center' }
 
