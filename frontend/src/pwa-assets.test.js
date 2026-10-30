@@ -41,3 +41,11 @@ describe('LevelUp install assets', () => {
     for (const icon of manifest.icons) expect(existsSync(resolve('public', icon.src)), icon.src).toBe(true)
   })
 })
+
+describe('sharing artwork', () => {
+  it('ships a compact 1200 by 630 PNG', () => {
+    const bytes = read('social-preview.png')
+    expect(pngSize(bytes)).toEqual([1200, 630])
+    expect(bytes.length).toBeLessThan(250_000)
+  })
+})

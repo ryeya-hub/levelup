@@ -29,4 +29,18 @@ describe('static brand metadata', () => {
       for (const key of keys) expect(pack[key], `${file}: ${key}`).toBeTruthy()
     }
   })
+  it('keeps social titles, descriptions and images consistent', () => {
+    const doc = new DOMParser().parseFromString(html, 'text/html')
+    for (const [selector, content] of [
+      ['meta[property="og:title"]', BRAND.title],
+      ['meta[property="og:description"]', BRAND.description],
+      ['meta[property="og:type"]', 'website'],
+      ['meta[name="twitter:card"]', 'summary_large_image'],
+      ['meta[name="twitter:title"]', BRAND.title],
+      ['meta[name="twitter:description"]', BRAND.description],
+    ]) expect(doc.querySelector(selector).content).toBe(content)
+    const image = doc.querySelector('meta[property="og:image"]').content
+    expect(image).toBe('https://diyocean.com/social-preview.png')
+    expect(doc.querySelector('meta[name="twitter:image"]').content).toBe(image)
+  })
 })
