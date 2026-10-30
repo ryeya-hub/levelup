@@ -40,7 +40,8 @@ The application surface remains the existing light `#f2f2f7` (dark `#000000`), r
 than applying the brand reference colours to semantic tokens. Fixed PWA background and
 theme colours use the Light default: a static manifest cannot follow each person's
 choice or OS theme. Runtime browser chrome still follows the effective theme. Existing
-PWA icons and native identifiers are intentionally retained for Phase 2.
+PWA icons now use the [Phase 2 install assets](PHASE2-ASSETS.md); native identifiers
+remain unchanged.
 
 The pre-React script is allowed by a CSP hash in `web/Dockerfile`. Update that hash
 whenever its contents change; `frontend/src/lib/csp.test.js` guards this relationship.

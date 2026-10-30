@@ -79,7 +79,7 @@ export default function Login() {
   }
   const head = <>
     <img src={brandSymbol} alt={BRAND.name} width="64" height="64" className="brand-symbol" />
-    <h1 style={{ fontSize: 34, fontWeight: 700, letterSpacing: '-.028em', margin: '10px 0 4px' }}>{BRAND.name}!</h1>
+    <h1 style={{ fontWeight: 700, letterSpacing: '-.028em', margin: '10px 0 4px' }}>{BRAND.name}!</h1>
   </>
   const wrap = { display: 'flex', flexDirection: 'column', justifyContent: 'center', minHeight: '78vh', textAlign: 'center' }
 

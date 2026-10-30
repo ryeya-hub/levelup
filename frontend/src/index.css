@@ -2362,3 +2362,28 @@ button.wl-summary{width:100%;padding:0 0 10px;text-align:start;border-radius:var
 .home-activity-value{flex-wrap:wrap;line-height:1.25}
 .home-activity-label{font-size:.875rem;line-height:1.4}
 @media (min-width:1000px){.progress-page .tiles{grid-template-columns:repeat(4,minmax(0,1fr))}}
+
+/* Scoped AA text contrast: keep accent fills and semantic status colours intact. */
+.home-page,.progress-page,.brand-entry{--label-2:rgba(235,235,245,.78);--label-3:rgba(235,235,245,.60);--text-acc:var(--label);--text-yellow:var(--label)}
+:root[data-theme="light"] :is(.home-page,.progress-page,.brand-entry){--label-2:rgba(60,60,67,.82);--label-3:rgba(60,60,67,.72)}
+@supports (color:color-mix(in srgb,red,blue)){
+  .home-page,.progress-page,.brand-entry{--text-acc:color-mix(in srgb,var(--acc) 60%,var(--label));--text-yellow:color-mix(in srgb,var(--yellow) 50%,var(--label))}
+}
+:is(.home-page,.progress-page,.brand-entry) .btn:not(.primary),.brand-entry a,.home-page .tag.acc{color:var(--text-acc)}
+.progress-page .pr{color:var(--label);font-weight:600}
+.brand-entry h1{font-size:2.125rem;line-height:1.15;overflow-wrap:anywhere}
+.progress-page .hdr{align-items:flex-start}
+.progress-page .hdr>.row{flex:none}
+.progress-page .seg button>span{min-width:0;overflow-wrap:anywhere;hyphens:auto;line-height:1.3}
+.home-page .card>.row.between>div{min-width:0}
+.home-page .row:has(>.big){flex-wrap:wrap}
+.home-activity-value{overflow-wrap:anywhere}
+
+.home-weight-delta{color:var(--label)}
+@supports (color:color-mix(in srgb,red,blue)){
+  .home-weight-delta{color:color-mix(in srgb,var(--metric-status) 60%,var(--label))}
+}
+@supports not (color:color-mix(in srgb,red 50%,blue)){
+  .home-page,.progress-page,.brand-entry{--text-acc:var(--label);--text-yellow:var(--label)}
+  .home-weight-delta{color:var(--label)}
+}

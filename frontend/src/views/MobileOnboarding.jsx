@@ -142,7 +142,7 @@ export default function MobileOnboarding() {
   const { chooseLocalMode } = useStore()
   const head = <>
     <BrandLogo />
-    <h1 style={{ fontSize: 34, fontWeight: 700, letterSpacing: '-.028em', margin: '10px 0 4px' }}>{t('Your progress starts here')}</h1>
+    <h1 style={{ fontWeight: 700, letterSpacing: '-.028em', margin: '10px 0 4px' }}>{t('Your progress starts here')}</h1>
   </>
   const wrap = { display: 'flex', flexDirection: 'column', justifyContent: 'center', minHeight: '78vh', textAlign: 'center' }
   return (

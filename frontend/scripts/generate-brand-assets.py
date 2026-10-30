@@ -67,12 +67,34 @@ def social_asset(font_path):
     image.save(PUBLIC / 'social-preview.png', optimize=True)
 
 
+def verify_assets():
+    for name, size in [('icon-180.png', (180, 180)), ('icon-192.png', (192, 192)),
+                       ('icon-512.png', (512, 512)), ('icon-maskable-512.png', (512, 512)),
+                       ('social-preview.png', (1200, 630))]:
+        with Image.open(PUBLIC / name) as image:
+            assert image.format == 'PNG' and image.size == size, name
+            image.verify()
+    with Image.open(PUBLIC / 'favicon.ico') as image:
+        assert image.format == 'ICO' and image.ico.sizes() == {(16, 16), (32, 32), (48, 48)}
+    assert PUBLIC.joinpath('favicon.svg').read_text() == SYMBOL.read_text()
+    with Image.open(PUBLIC / 'icon-maskable-512.png') as image:
+        bg = image.getpixel((0, 0))
+        for y in range(512):
+            for x in range(512):
+                if image.getpixel((x, y)) != bg:
+                    assert math.hypot(x - 256, y - 256) < 512 * 0.4
+    print('7 brand images decoded and validated; maskable foreground is inside the safe circle.')
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--font', default='C:/Windows/Fonts/seguisb.ttf')
     parser.add_argument('--social', action='store_true')
+    parser.add_argument('--check', action='store_true')
     args = parser.parse_args()
-    if args.social:
+    if args.check:
+        verify_assets()
+    elif args.social:
         social_asset(args.font)
     else:
         install_assets()

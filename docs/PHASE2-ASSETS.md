@@ -19,6 +19,7 @@ Regeneration uses Python with Pillow (available in the desktop's bundled runtime
 ```text
 python frontend/scripts/generate-brand-assets.py
 python frontend/scripts/generate-brand-assets.py --social --font C:/Windows/Fonts/seguisb.ttf
+python frontend/scripts/generate-brand-assets.py --check
 ```
 
 The generated binaries are committed; ordinary builds do not require Python/Pillow.
@@ -33,3 +34,7 @@ tags in `frontend/index.html`; tests intentionally guard the current configured 
 Local checks cannot prove OS launcher refreshes, installed-PWA icon updates or social
 crawler cache refreshes. Those may require an app update/reinstall or a crawler rescrape
 after deployment. No production request or deployment was used to change those caches.
+
+After a normal production build, `node frontend/scripts/check-brand-build.mjs frontend/dist` (from the repository root) checks built HTML, icon and social-image
+references. The existing worker discovers supported HTML-linked assets as before;
+ICO and manifest-only icon caching were not added or changed in this phase.
