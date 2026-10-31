@@ -1,3 +1,4 @@
+import { BRAND } from '../brand.js'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useStore } from '../store/useStore.js'
@@ -104,10 +105,10 @@ export default function Home() {
   // already in progress wins, as on the today row — starting another would overwrite it.
   const onQueueStart = id => { if (S.active) nav('/workout'); else startFlow([id]) }
 
-  return <div className="narrow">
+  return <div className="narrow home-page">
     <div className="hdr">
       <SeasonDeco spot="header-bats" />
-      <div><h1>{user ? t('Hi {0}', user.name) : 'openGym'}</h1><div className="sub">{today.toLocaleDateString(dateLocale(), { weekday: 'long', day: 'numeric', month: 'long' })}</div></div>
+      <div><h1>{user ? t('Hi {0}', user.name) : BRAND.name}</h1><div className="sub">{today.toLocaleDateString(dateLocale(), { weekday: 'long', day: 'numeric', month: 'long' })}</div></div>
       <button className="iconbtn" onClick={() => nav('/settings')} aria-label={trouble ? t('Settings') + ', ' + t('Connection problem') : t('Settings')}><Icon name="gear" />{trouble && <span className="tab-dot" aria-hidden="true" />}</button>
     </div>
 
@@ -185,9 +186,9 @@ export default function Home() {
       <div className="card">
         <div className="row" style={{ gap: 10, marginBottom: 6 }}>
           <span className="lrow-i"><Icon name="calendar" /></span>
-          <div className="big" style={{ fontSize: 22 }}>{t('Welcome!')}</div>
+          <div className="big" style={{ fontSize: 22 }}>{t('Your training, at a glance')}</div>
         </div>
-        <div className="muted small" style={{ marginBottom: 12 }}>{t('Set up your weekly routine to get going, or grab a ready-made starter plan.')}</div>
+        <div className="muted small" style={{ marginBottom: 12 }}>{t('Stay consistent. See your progress.')}</div>
         <Button variant="primary" icon="clipboard" onClick={starterPlanSheet}>{t('Load starter plan')}</Button>
         <div style={{ height: 8 }} /><Button onClick={() => nav('/plan')}>{t('Build my own plan')}</Button>
       </div>
@@ -197,7 +198,7 @@ export default function Home() {
       <div className="row between bw-head" style={{ marginBottom: 6 }}>
         <h2 style={{ margin: 0 }}>{t('Body weight')}</h2>
         <div className="row" style={{ gap: 8 }}>
-          <Button size="sm" icon="target" style={S.targetW ? { color: 'var(--yellow)' } : undefined} onClick={goalSheet}>{S.targetW ? fmtNum(S.targetW) : t('Goal')}</Button>
+          <Button size="sm" icon="target" style={S.targetW ? { color: 'var(--text-yellow)' } : undefined} onClick={goalSheet}>{S.targetW ? fmtNum(S.targetW) : t('Goal')}</Button>
           <Button size="sm" icon="plus" onClick={() => bwSheet()}>{t('Log')}</Button>
         </div>
       </div>
@@ -206,7 +207,7 @@ export default function Home() {
           <div className="big">{fmtNum(bw.w)} <span className="muted" style={{ fontSize: '1rem' }}>{S.unit}</span></div>
           {/* only when it actually moved — an unchanged weight used to read as "− 0" */}
           {!!delta && (
-            <span className="small row" style={{ gap: 2, fontWeight: 500, color: bwDeltaColor(delta, bw.w) }}>
+            <span className="small row home-weight-delta" style={{ gap: 2, fontWeight: 500, '--metric-status': bwDeltaColor(delta, bw.w) }}>
               <Icon name={delta > 0 ? 'arrowUp' : 'arrowDown'} style={{ fontSize: 12 }} />
               {fmtNum(Math.abs(delta))}
             </span>
@@ -214,7 +215,7 @@ export default function Home() {
           <span className="dim small" style={{ marginInlineStart: 'auto' }}>{fmtDate(bw.d, true)}</span>
         </div>
         {S.targetW && (
-          <div className="small row" style={{ color: 'var(--yellow)', marginTop: 4, gap: 5 }}>
+          <div className="small row" style={{ color: 'var(--text-yellow)', marginTop: 4, gap: 5 }}>
             <Icon name="target" style={{ fontSize: 13 }} />
             <span>{t('Goal')} {fmtNum(S.targetW)} {S.unit} · {Math.abs(S.targetW - bw.w) < 0.05 ? t('reached!') : t(S.targetW > bw.w ? '{0} to gain' : '{0} to lose', fmtNum(Math.abs(S.targetW - bw.w)) + ' ' + S.unit)}</span>
           </div>
@@ -235,11 +236,11 @@ export default function Home() {
       <SeasonDeco spot="home-streak" />
       <div className="row between">
         <div>
-          <div className="row" style={{ gap: 7, fontSize: 22, fontWeight: 600, letterSpacing: '-.021em' }}>
+          <div className="row home-activity-value" style={{ gap: 7, fontSize: 24, fontWeight: 600, letterSpacing: '-.021em' }}>
             <Icon name="flame" style={{ color: 'var(--orange)' }} />
             {t('{0} week streak', streakWeeks(S))}
           </div>
-          <div className="muted small" style={{ marginTop: 2 }}>{doneThisWeek}{plannedPerWeek ? ' / ' + plannedPerWeek : ''} {t('this week')} · {tn('{0} workout total', '{0} workouts total', S.workouts.length)}</div>
+          <div className="muted small home-activity-label" style={{ marginTop: 2 }}>{doneThisWeek}{plannedPerWeek ? ' / ' + plannedPerWeek : ''} {t('this week')} · {tn('{0} workout total', '{0} workouts total', S.workouts.length)}</div>
         </div>
         <Icon name="calendar" className="chev" style={{ fontSize: 20 }} />
       </div>

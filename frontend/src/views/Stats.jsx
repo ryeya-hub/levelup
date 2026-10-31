@@ -280,7 +280,7 @@ function MuscleBalance({ S }) {
     {view === 'balance' ? <>
       <div className="row between" style={{ marginBottom: 8 }}>
         <h2 style={{ margin: 0 }}>{t('Muscle balance')} <span className="dim" style={{ textTransform: 'none', letterSpacing: 0 }}>· {on ? t('by hard sets') : t('by sets worked')}</span></h2>
-        {!weekly && rated && <Button size="sm" icon="gauge" style={on ? { color: 'var(--yellow)' } : undefined}
+        {!weekly && rated && <Button size="sm" icon="gauge" style={on ? { color: 'var(--text-yellow)' } : undefined}
           onClick={() => { setHard(h => !h); setSel(null) }}>{on ? t('Hard') : t('All')}</Button>}
       </div>
       <Segmented className="seg-range" value={win} onChange={v => { setWin(v); setSel(null); setWeeklyExpanded(false) }}
@@ -417,14 +417,14 @@ function EffortCard({ S }) {
           <div className="small dim">{t('average effort')}</div>
         </div>
         <div style={{ textAlign: 'end' }}>
-          <div className="stat-v" style={{ color: 'var(--yellow)' }}>{sum.hardPct == null ? '–' : Math.round(sum.hardPct * 100) + '%'}</div>
+          <div className="stat-v" style={{ color: 'var(--text-yellow)' }}>{sum.hardPct == null ? '–' : Math.round(sum.hardPct * 100) + '%'}</div>
           <div className="small dim">{t('at {0} {1} or harder', hd, fmtNum(toScale(kind, HARD_RIR)))}</div>
         </div>
       </div>
       <div className="small dim" style={{ marginTop: 8 }}>{estimated
         ? t('{0} rated · {1} estimated of {2} sets', sum.rated, sum.est, sum.done)
         : t('{0} of {1} finished sets rated', sum.rated, sum.done)}</div>
-      {effortOf(S) === 'none' && <div className="small" style={{ color: 'var(--yellow)', marginTop: 4 }}>
+      {effortOf(S) === 'none' && <div className="small" style={{ color: 'var(--text-yellow)', marginTop: 4 }}>
         {t('Effort per set is off. Turn it on in Settings → Workout to keep rating.')}
       </div>}
       {pts.length > 1 && <>
@@ -720,8 +720,8 @@ export default function Stats() {
   if (showMax) exOpts.push({ value: 'max', label: t('Max reps') })
   if (showRel) exOpts.push({ value: 'bodyweight', label: t('Bodyweight') })
 
-  return <>
-    <div className="hdr"><SeasonDeco spot="stats-hdr" /><div><h1>{t('Stats')}</h1><div className="sub">{t('Progress & history')}</div></div>
+  return <div className="progress-page">
+    <div className="hdr"><SeasonDeco spot="stats-hdr" /><div><h1>{t('Your progress')}</h1><div className="sub">{t('See how your effort adds up.')}</div></div>
       <div className="row" style={{ gap: 8 }}>
         <button className="iconbtn" onClick={reportSheet} aria-label={t('Performance report')} title={t('Performance report')}><Icon name="note" /></button>
         <button className="iconbtn" onClick={() => nav('/history')} aria-label={t('History')}><Icon name="history" /></button>
@@ -731,7 +731,7 @@ export default function Stats() {
       <div className="tile"><div className="l"><Icon name="dumbbell" />{t('Workouts')}</div><div className="v">{workouts.length}</div></div>
       <div className="tile"><div className="l"><Icon name="calendar" />{t('This month')}</div><div className="v">{monthW}</div></div>
       <div className="tile"><div className="l"><Icon name="flame" />{t('Week streak')}</div><div className="v">{streakWeeks(S)}</div></div>
-      <div className="tile"><div className="l"><Icon name="scale" />{t('Weight 30d')}</div><div className="v" style={{ fontSize: 22, color: bwDelta30 === null ? 'inherit' : bwDeltaColor(bwDelta30, (lastBW(S) || {}).w || 0) }}>{bwDelta30 === null ? '–' : (bwDelta30 > 0 ? '+' : '') + fmtNum(bwDelta30) + ' ' + S.unit}</div></div>
+      <div className="tile"><div className="l"><Icon name="scale" />{t('Weight 30d')}</div><div className="v v-unit" style={{ color: bwDelta30 === null ? 'inherit' : bwDeltaColor(bwDelta30, (lastBW(S) || {}).w || 0) }}>{bwDelta30 === null ? '–' : (bwDelta30 > 0 ? '+' : '') + fmtNum(bwDelta30) + ' ' + S.unit}</div></div>
       {/* Everything ever lifted (Discord): imports included, warm-ups only when the profile
           counts them (#719). Full width, since a few hundred sessions make a long number. */}
       {lifetime > 0 && <div className="tile" style={{ gridColumn: '1 / -1' }} data-lifetime-volume><SeasonDeco spot="stats-tile" /><div className="l"><Icon name="plate" />{t('Lifted in total')}</div><div className="v">{fmtVol(Math.round(lifetime), S.unit)}</div></div>}
@@ -775,7 +775,7 @@ export default function Stats() {
         <div className="row between bw-head" style={{ marginBottom: 8 }}>
           <h2 style={{ margin: 0 }}>{t('Body weight')}</h2>
           <div className="row" style={{ gap: 8 }}>
-            <Button size="sm" icon="target" style={S.targetW ? { color: 'var(--yellow)' } : undefined} onClick={goalSheet}>{S.targetW ? fmtNum(S.targetW) : t('Goal')}</Button>
+            <Button size="sm" icon="target" style={S.targetW ? { color: 'var(--text-yellow)' } : undefined} onClick={goalSheet}>{S.targetW ? fmtNum(S.targetW) : t('Goal')}</Button>
             <Button size="sm" icon="plus" onClick={() => bwSheet()}>{t('Log')}</Button>
           </div>
         </div>
@@ -857,10 +857,10 @@ export default function Stats() {
 
     {workouts.length > 0 && <>
       <div className="row between" style={{ marginBottom: 10 }}>
-        <h4 className="sec" style={{ margin: 0 }}>{t('Recent workouts')}</h4>
+        <h4 className="sec" style={{ margin: 0 }}>{t('Recent activity')}</h4>
         <Button size="sm" variant="ghost" trailingIcon="chevronRight" onClick={() => nav('/history')}>{t('All')} {workouts.length}</Button>
       </div>
       <div className="list">{[...workouts].reverse().slice(0, 6).map(w => <WorkoutRow key={w.id} w={w} onClick={() => workoutDetailSheet(w)} />)}</div>
     </>}
-  </>
+  </div>
 }

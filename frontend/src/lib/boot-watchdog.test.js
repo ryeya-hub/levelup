@@ -35,6 +35,13 @@ const syntaxError = () => new ErrorEvent('error', {
 })
 
 describe('boot watchdog', () => {
+  it('builds the ascending icon from left to middle to right', () => {
+    const steps = [...boot().querySelectorAll('rect')]
+    expect(steps.map(step => step.getAttribute('class'))).toEqual(['pl', 'bar in', 'pr outer'])
+    expect(steps.map(step => Number(step.getAttribute('x')))).toEqual([100, 214, 328])
+    expect(html).toContain('#boot .in{animation-delay:.22s}')
+    expect(html).toContain('#boot .outer{animation-delay:.36s}')
+  })
   it('replaces the logo with the reason and a Reload button when a chunk does not parse', () => {
     window.dispatchEvent(syntaxError())
     const b = boot()
@@ -42,7 +49,7 @@ describe('boot watchdog', () => {
     expect(b.querySelector('svg')).toBeNull()
     expect(b.getAttribute('role')).toBe('alert')
     expect(b.hasAttribute('aria-hidden')).toBe(false)
-    expect(b.textContent).toContain('openGym could not start on this browser.')
+    expect(b.textContent).toContain('LevelUp could not start on this browser.')
     expect(b.querySelector('code').textContent).toContain('Invalid regular expression: invalid group specifier name at media-refs-CaxawJNr.js:1')
     const reload = b.querySelector('button')
     expect(reload.textContent).toBe('Reload')
@@ -66,7 +73,7 @@ describe('boot watchdog', () => {
     window.dispatchEvent(new ErrorEvent('error', { message: "TypeError: undefined is not an object (evaluating 'a.b')", filename: 'https://gym.test/assets/x.js', lineno: 3 }))
     expect(boot().className).toBe('')
     vi.advanceTimersByTime(10000)
-    expect(boot().textContent).toContain('openGym could not start on this browser.')
+    expect(boot().textContent).toContain('LevelUp could not start on this browser.')
     expect(boot().querySelector('code').textContent).toContain("undefined is not an object (evaluating 'a.b') at x.js:3")
   })
 
@@ -74,7 +81,7 @@ describe('boot watchdog', () => {
     vi.advanceTimersByTime(9999)
     expect(boot().querySelector('svg')).not.toBeNull()
     vi.advanceTimersByTime(1)
-    expect(boot().textContent).toContain('openGym is taking too long to start.')
+    expect(boot().textContent).toContain('LevelUp is taking too long to start.')
   })
 
   it('waits for the boot screen when the failure comes before the page is there', () => {

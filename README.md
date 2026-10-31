@@ -1,10 +1,19 @@
+# LevelUp
+
+**Train today. Grow over time.**
+
+Plan your workouts, track your training, and see how far you've come.
+
+LevelUp is based on [openGym](https://github.com/DuarteSantos8/openGym), © 2026 Duarte Santos, under AGPL-3.0-or-later. Upstream community, download and support links below still refer to openGym. See [LICENSE](LICENSE) and [NOTICE.md](NOTICE.md), including the separate exercise-media licence.
+
+[Brand language and Phase 1 scope](docs/BRAND.md). New profiles start in Light; saved Dark, Light, System and accent preferences remain supported.
+
 <div align="center">
 
 <p>
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/hero-dark.png">
-  <source media="(prefers-color-scheme: light)" srcset="assets/readme/hero-light.png">
-  <img src="assets/readme/hero-dark.png" alt="openGym: the gym tracker you host yourself" width="100%">
+  <source media="(prefers-color-scheme: dark)" srcset="frontend/src/assets/brand/levelup-wordmark-dark.svg">
+  <img src="frontend/src/assets/brand/levelup-wordmark.svg" alt="LevelUp" width="320">
 </picture>
 </p>
 
@@ -29,10 +38,10 @@
 
 </div>
 
-## Why openGym
+## Why LevelUp
 
 Most workout apps keep your data on their servers, push you towards a subscription, or vanish
-when the company does. openGym runs on your own box, keeps your data in a folder you control, and
+when the company does. LevelUp runs on your own box, keeps your data in a folder you control, and
 is yours to fork. It still behaves like a modern app: installable on the home screen, passkey
 sign-in, works offline, syncs between your phone and your laptop.
 

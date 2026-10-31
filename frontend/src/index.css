@@ -42,9 +42,9 @@
   --purple:#bf5af2; --mint:#63e6e2; --brown:#ac8e68; --grey:#8e8e93;
 
   /* accent (per-account, synced) */
-  --acc:  var(--green);
-  --acc-2:#248a3d;
-  --on-acc:#000000;
+  --acc:  #6857F2;
+  --acc-2:#4e41b6;
+  --on-acc:#ffffff;
   --acc-soft: color-mix(in srgb, var(--acc) 16%, transparent);
   --acc-line: color-mix(in srgb, var(--acc) 38%, transparent);
 
@@ -87,7 +87,7 @@
   --blue:#007aff; --green:#34c759; --red:#ff3b30; --orange:#ff9500;
   --yellow:#ffcc00; --teal:#30b0c7; --indigo:#5856d6; --pink:#ff2d55;
   --purple:#af52de; --mint:#00c7be; --brown:#a2845e; --grey:#8e8e93;
-  --acc-2:#248a3d;
+  --acc-2:#4e41b6;
   --on-acc:#ffffff;
 }
 
@@ -2341,3 +2341,49 @@ button.wl-summary{width:100%;padding:0 0 10px;text-align:start;border-radius:var
 .gym-radius-row>:first-child{flex:1}
 .gym-radius-val{min-width:64px;text-align:end;font-variant-numeric:tabular-nums;color:var(--label-2)}
 .gym-actions{display:flex;flex-direction:column;gap:10px;margin:4px 0 30px}
+
+/* The brand artwork is independent of the user's selected accent. */
+.brand-wordmark{width:160px;max-width:80%;margin:0 auto 12px}
+.brand-wordmark img{display:block;width:100%;height:auto}
+.brand-wordmark .brand-on-dark{display:none}
+:root[data-theme="dark"] .brand-wordmark .brand-on-light{display:none}
+:root[data-theme="dark"] .brand-wordmark .brand-on-dark{display:block}
+
+/* Phase 2: only branded entry points and existing Home/Progress presentation. */
+.brand-symbol{display:block;width:64px;height:auto;margin:0 auto 12px}
+.home-page .card,.progress-page .card{padding:16px;margin-bottom:16px}
+.home-page .card h2,.progress-page .card h2{font-size:1.125rem;font-weight:600;line-height:1.3;color:var(--label)}
+.progress-page .sec{font-size:1.125rem;font-weight:600;line-height:1.3;color:var(--label);margin-top:24px}
+.progress-page .tiles{gap:12px;grid-template-columns:repeat(2,minmax(0,1fr));margin-bottom:16px}
+.progress-page .tile{min-width:0;padding:16px}
+.progress-page .tile .l{font-size:.8125rem;font-weight:500;line-height:1.35}
+.progress-page .tile .v{font-size:1.75rem;font-weight:600;line-height:1.2;overflow-wrap:anywhere}
+.progress-page .tile .v-unit{font-size:1.5rem}
+.home-activity-value{flex-wrap:wrap;line-height:1.25}
+.home-activity-label{font-size:.875rem;line-height:1.4}
+@media (min-width:1000px){.progress-page .tiles{grid-template-columns:repeat(4,minmax(0,1fr))}}
+
+/* Scoped AA text contrast: keep accent fills and semantic status colours intact. */
+.home-page,.progress-page,.brand-entry{--label-2:rgba(235,235,245,.78);--label-3:rgba(235,235,245,.60);--text-acc:var(--label);--text-yellow:var(--label)}
+:root[data-theme="light"] :is(.home-page,.progress-page,.brand-entry){--label-2:rgba(60,60,67,.82);--label-3:rgba(60,60,67,.72)}
+@supports (color:color-mix(in srgb,red,blue)){
+  .home-page,.progress-page,.brand-entry{--text-acc:color-mix(in srgb,var(--acc) 60%,var(--label));--text-yellow:color-mix(in srgb,var(--yellow) 50%,var(--label))}
+}
+:is(.home-page,.progress-page,.brand-entry) .btn:not(.primary),.brand-entry a,.home-page .tag.acc{color:var(--text-acc)}
+.progress-page .pr{color:var(--label);font-weight:600}
+.brand-entry h1{font-size:2.125rem;line-height:1.15;overflow-wrap:anywhere}
+.progress-page .hdr{align-items:flex-start}
+.progress-page .hdr>.row{flex:none}
+.progress-page .seg button>span{min-width:0;overflow-wrap:anywhere;hyphens:auto;line-height:1.3}
+.home-page .card>.row.between>div{min-width:0}
+.home-page .row:has(>.big){flex-wrap:wrap}
+.home-activity-value{overflow-wrap:anywhere}
+
+.home-weight-delta{color:var(--label)}
+@supports (color:color-mix(in srgb,red,blue)){
+  .home-weight-delta{color:color-mix(in srgb,var(--metric-status) 60%,var(--label))}
+}
+@supports not (color:color-mix(in srgb,red 50%,blue)){
+  .home-page,.progress-page,.brand-entry{--text-acc:var(--label);--text-yellow:var(--label)}
+  .home-weight-delta{color:var(--label)}
+}

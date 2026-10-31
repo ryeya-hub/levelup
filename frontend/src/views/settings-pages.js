@@ -19,7 +19,7 @@ export const PAGES = {
   coach: { title: 'AI Coach', icon: 'sparkles', tint: 'var(--green)' },
   watch: { title: 'Apple Watch', icon: 'watch', tint: 'var(--grey)' },
   data: { title: 'Data & backup', icon: 'folder', tint: 'var(--blue)' },
-  about: { title: 'About & updates', icon: 'info', tint: 'var(--grey)' },
+  about: { title: 'About LevelUp', icon: 'info', tint: 'var(--grey)' },
   account: { title: 'Account', icon: 'personCircle', tint: 'var(--grey)' },
   advanced: { title: 'Fine-tuning', icon: 'wrench', tint: 'var(--grey)', parent: 'workout' },
   // Phone app only (#614): the gyms that get you a nudge when you arrive, and one of them.
