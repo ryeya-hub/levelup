@@ -21,9 +21,9 @@ function RegisterSheet({ close }) {
   const [code, setCode] = useState('')
   const inviteOnly = !!config?.invite_only
   // A password is offered only where the instance allows it (#118), and is the only choice in a
-  // browser that cannot make a passkey. Where both work, the passkey stays the first one.
+  // browser that cannot make a passkey. Where both work, password is the default.
   const pwOn = passwordOn(config)
-  const [how, setHow] = useState(webauthnOK() ? 'passkey' : 'password')
+  const [how, setHow] = useState(pwOn || !webauthnOK() ? 'password' : 'passkey')
   const ref = useRef(null)
   useEffect(() => { setTimeout(() => ref.current?.focus(), 250) }, [])
   // Boot already fetched this; retry here only if that attempt failed, so the invite field still
@@ -41,7 +41,7 @@ function RegisterSheet({ close }) {
     } catch (e) { if (e.name !== 'NotAllowedError' && e.name !== 'AbortError') useUI.getState().toast(passkeyError(e, t('Registration failed'))) }
   }
   const choose = pwOn && webauthnOK() && <>
-    <Segmented options={[{ value: 'passkey', label: t('Passkey'), icon: 'fingerprint' }, { value: 'password', label: t('Password'), icon: 'key' }]}
+    <Segmented options={[{ value: 'password', label: t('Password'), icon: 'key' }, { value: 'passkey', label: t('Passkey'), icon: 'fingerprint' }]}
       value={how} onChange={setHow} />
     <div style={{ height: 12 }} />
   </>
@@ -103,9 +103,9 @@ export default function Login() {
       {head}
       <div className="muted" style={{ marginBottom: 34 }}>{t(BRAND.motivation)}</div>
       {webauthnOK() ? <>
-        <Button variant="primary" icon="fingerprint" onClick={signIn}>{t('Sign in with passkey')}</Button>
+        {pwOn && <><Button variant="primary" icon="key" onClick={() => openPasswordSignIn()}>{t('Sign in with password')}</Button><div style={{ height: 10 }} /></>}
+        <Button variant={pwOn ? undefined : 'primary'} icon="fingerprint" onClick={signIn}>{t('Sign in with passkey')}</Button>
         <div style={{ height: 10 }} />
-        {pwOn && <><Button icon="key" onClick={() => openPasswordSignIn()}>{t('Sign in with password')}</Button><div style={{ height: 10 }} /></>}
         <Button icon="plusCircle" onClick={register}>{t('Create new profile')}</Button>
         {/* Already signed in on another device: a code from there gives this one a passkey of
             its own (#95), instead of a new, empty profile. */}
@@ -117,7 +117,6 @@ export default function Login() {
       </> : pwOn ? <>
         {/* Plain http on a LAN address, or a browser without passkey support: the password is
             the way in, and the only way to create a profile from here. */}
-        <div className="card small muted" style={{ textAlign: 'start', marginBottom: 14 }}>{t("This browser doesn't support passkeys. Sign in with your name and password instead.")}</div>
         <Button variant="primary" icon="key" onClick={() => openPasswordSignIn()}>{t('Sign in with password')}</Button>
         <div style={{ height: 10 }} />
         <Button icon="plusCircle" onClick={register}>{t('Create new profile')}</Button>
@@ -129,7 +128,7 @@ export default function Login() {
         // so say that plainly instead of offering a local profile that cannot be created.
         : t("This browser doesn't support passkeys, and this instance requires an account. Try a browser or device with passkey support.")}</div>}
       {canGuest && <Button variant="ghost" className="dim" onClick={() => setGuest(true)}>{t('Continue without account')}</Button>}
-      <div className="dim small" style={{ marginTop: 26, lineHeight: 1.5 }}>{t('Build momentum, one session at a time.')}<br />{pwOn ? t('Passkeys use {0}. A password works too, where passkeys do not.', bio()) : t('Passkeys use {0}. No passwords to remember.', bio())}<br />{t('Each profile keeps its own plan, workouts & body weight.')}</div>
+      <div className="dim small" style={{ marginTop: 26, lineHeight: 1.5 }}>{t('Build momentum, one session at a time.')}<br />{pwOn ? t('Use your profile name (or the e-mail you added to it) and your password.') : t('Passkeys use {0}. No passwords to remember.', bio())}<br />{t('Each profile keeps its own plan, workouts & body weight.')}</div>
     </div>
   )
 }
