@@ -46,6 +46,91 @@ node node_modules/vitest/vitest.mjs run src/lib/sync-merge.order-regression.test
 
 The 60 kg case currently fails; the 65 kg control passes. A proper fix must retain
 delete/edit/undo semantics, old-device compatibility and field-level convergence.
-The current task explicitly prohibits changing sync algorithms to pass branding CI,
-so that fix remains a separate review dependency. Do not skip the property, remove
+The original branding task prohibited changing sync algorithms to pass branding CI.
+The owner subsequently authorised a separate, compatibility-preserving repair;
+the investigation below records why the first local candidate is insufficient.
+Do not skip the property, remove
 the unchanged-save case from its generator, pin a passing seed, or retry until green.
+
+## Repair investigation — 2026-10-31
+
+The isolated repair branch starts at verified Phase 1 head
+`d7c0ca2eede5e86e0f0267696f59ccffd2a4e604`, with PR #4's reproduction
+cherry-picked as `eb1955b8e`. Phase 1 has not yet been merged: the existing main-push
+Pages and Docker publishers require an approved temporary pause to avoid deployment.
+Before a repair can merge, integrate the resulting main normally; do not rewrite
+the published evidence branch.
+
+### Existing precedence and intended compatibility gates
+
+| Situation | Behaviour to preserve or establish |
+| --- | --- |
+| Edit, then later deletion | Deletion removes the record. |
+| Explicit restoration after deletion | Add-back's negative tombstone permits the restored record. |
+| Genuine edit after deletion | Existing contract permits the edited record to remain; a blanket delete-wins rule would break this. |
+| Unchanged stale save | Saving alone must not manufacture a field edit or defeat deletion. Already-persisted coarse timestamps cannot reliably identify such saves. |
+| Independent field edits | Preserve both fields where their histories permit; do not replace field merging with whole-record last-writer-wins. |
+| Same-field edits | Later field edit wins; existing undo rules and documented tie behaviour still apply. |
+| Repeated delivery | Must not change settled payload or produce fresh semantic edit stamps. |
+| Legacy record without `_f` | Its `_ts` records only coarse history. Absence of `_f` does not prove an unchanged save. Do not invent per-field edit times. |
+
+`stampWorkout` advances the record timestamp. `stampChange` invokes `stampEntry`,
+which advances `_ts` even if no payload field changed, but only stamps changed
+fields in `_f`. `mergeEntry` combines fields, keeps maximum stamps and a maximum
+record timestamp; `_u` handles field undo precedence. `stampDeletions` stores only
+a signed timestamp per ID. `mergeDeletions` retains the latest absolute stamp,
+with add-back winning ties. `applyDeletions` physically filters records whose
+record time is not later than a positive tombstone. It does not retain their
+payload or field history. Later merges therefore cannot recover those values.
+
+The store, session editor, import/restore/reset paths, server stamping counterpart
+and legacy lifting were inspected. The ordinary session editor already skips an
+unchanged save; persisted records and older writers still require compatibility.
+The API maintains its own stamping implementation (`api/sync-stamps.js`); a writer
+change alone would not establish convergence across versions.
+
+### Additional deterministic failures
+
+`src/lib/sync-merge.compatibility-regression.test.js` adds real assertions, not
+expected-failure or skipped tests:
+
+1. A 20 kg correction at 100030, deletion at 100041, and genuine note edit at
+   100052 diverge even when the base record already has `_f` stamps. Deleting A
+   first yields 60 kg plus the note; keeping C first and then merging A yields
+   20 kg plus the same note, with different `entries` stamps.
+2. An already-saved old-client record with `_ts = 100052` and no `_f` reproduces
+   the original divergence without invoking any current stamping helper.
+
+Passing controls cover deletion against an unchanged offline copy, explicit
+add-back, independent field edits without deletion, repeated delivery and unrelated
+theme/accent/rest preferences.
+
+### Rejected local experiment
+
+A small `stampEntry` experiment retained the previous record timestamp when no
+payload field changed. It made the original generated 60/65 kg reproduction pass,
+but the two compatibility failures above remained: **five passed, two failed**.
+The experiment was removed completely. The committed production algorithm is
+unchanged. Without the experiment, the two files report **four passed, three
+failed**. Existing legacy, reset, restore, unit conversion, undo, sync and offline
+controls separately report **186 passed** across 13 files.
+
+### Stop condition and next design review
+
+A writer-only correction cannot repair information already discarded by a merge,
+nor distinguish a legacy genuine edit from a legacy unchanged save when both have
+only a coarse `_ts`. Simply treating all unstamped fields as edited at `_ts`
+would overwrite independent corrections. Always preferring deletion would discard
+valid later edits and explicit restorations. Neither is an acceptable shortcut.
+
+A complete solution needs a reviewed representation retaining sufficient competing
+field/payload history across deletion (or an explicitly approved change to existing
+merge semantics). This is broader than the tested local timestamp correction.
+Before implementing it, specify how the server, older installed clients, backup
+imports, tombstone caps, undo metadata, reset and unit conversion preserve or
+translate that history. An additive JSON field alone does not prove compatibility:
+old clients may ignore, overwrite or omit it while still merging with the old rules.
+
+Per the owner's stop condition, no persisted representation, migration, API or
+production algorithm was changed. The repair remains blocked pending that design
+and rollout review. Do not merge this draft or Phase 2 while these gates fail.
