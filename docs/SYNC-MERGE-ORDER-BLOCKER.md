@@ -56,10 +56,11 @@ the unchanged-save case from its generator, pin a passing seed, or retry until g
 
 The isolated repair branch starts at verified Phase 1 head
 `d7c0ca2eede5e86e0f0267696f59ccffd2a4e604`, with PR #4's reproduction
-cherry-picked as `eb1955b8e`. Phase 1 has not yet been merged: the existing main-push
-Pages and Docker publishers require an approved temporary pause to avoid deployment.
-Before a repair can merge, integrate the resulting main normally; do not rewrite
-the published evidence branch.
+cherry-picked as `eb1955b8e`. Phase 1 subsequently merged normally as
+`3caee2c9f47044bed5b0f215653f72f448c9bde9`. The owner approved pausing the Pages
+and Docker publishers for that merge; both were restored afterward without running.
+The repair branch integrated that main with a normal merge (`b28d1862819245d6f0d09f835f0b5daa82833287`).
+Draft [PR #5](https://github.com/ryeya-hub/levelup/pull/5) targets main; PR #4 is unchanged.
 
 ### Existing precedence and intended compatibility gates
 
@@ -114,6 +115,11 @@ The experiment was removed completely. The committed production algorithm is
 unchanged. Without the experiment, the two files report **four passed, three
 failed**. Existing legacy, reset, restore, unit conversion, undo, sync and offline
 controls separately report **186 passed** across 13 files.
+
+Linux CI independently confirms **6,575 passed, three failed**, exactly the three
+deterministic assertions above: [run 41153226473](https://github.com/ryeya-hub/levelup/actions/runs/41153226473),
+[frontend job](https://github.com/ryeya-hub/levelup/actions/runs/41153226473/job/124394307115).
+The existing random property suite passed that run; this does not resolve the failures.
 
 ### Stop condition and next design review
 
