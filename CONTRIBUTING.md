@@ -1,4 +1,4 @@
-# Contributing to openGym
+# Contributing to LevelUp
 
 Thanks for taking a look. openGym is deliberately small and light on dependencies, and the aim is
 to keep it that way: easy to read, easy to self-host.
@@ -126,10 +126,14 @@ Open an issue with what you did, what you expected, what happened, and your brow
 login or passkey problems, include your `RP_ID` and `ORIGIN` (not the contents of `data/`); most
 login issues are an origin mismatch.
 
-## Contributor License Agreement
+## LevelUp contribution policy
 
-Before your first pull request is merged, you sign the [Contributor License Agreement](CLA.md) once,
-by commenting the sentence the CLA check asks for on your pull request. It covers all your past and
-future contributions. You keep the copyright in your work; openGym may use and relicense it, which
-is what keeps the app possible in the App Store and Google Play long term. Every version released
-under the [GNU AGPL v3.0](LICENSE) stays available under it.
+LevelUp is an independently maintained fork of openGym. Contributions to this
+repository do not require signing openGym's Contributor License Agreement and are
+not submitted upstream on your behalf. The inherited CLA workflows have been removed.
+[CLA.md](CLA.md) is retained unchanged as historical upstream documentation, not as
+an agreement required for LevelUp contributions.
+
+The [GNU AGPL v3.0](LICENSE), copyright notices, source-availability obligations and
+[third-party notices](NOTICE.md) continue to apply. Exercise media remains separately
+licensed; removing CLA enforcement does not grant additional rights to those assets.
